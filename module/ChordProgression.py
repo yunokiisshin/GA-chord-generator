@@ -1,5 +1,6 @@
 import numpy as np
 import pygad
+import random
 
 
 # note to self: utilize chord generator from previous project
@@ -19,8 +20,10 @@ class ChordProgression:
         self.chord_set = np.zeros((num_bars, num_notes))
         
         
-    def randamlyInitializeChordSet(self):
-        # for i, chord in enumerate(self.chord_list):
+    def randomlyInitializeChordSet(self):
+        for i, chord in enumerate(self.chord_list):
+            random_chord = [random.randint(36,96) for i in range(4)]
+            self.chord_set[i] = random_chord
             
         
     def getBarLength(self):
@@ -32,4 +35,6 @@ class ChordProgression:
     def getChordSet(self):
         return self.chord_set
 
-# use example: instance = ChordProgression(['C', 'Dm', 'Em', 'F'])
+# instance = ChordProgression(['C', 'Dm', 'Em', 'F'])
+# instance.randomlyInitializeChordSet()
+# print(instance.getChordSet())
