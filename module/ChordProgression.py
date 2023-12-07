@@ -1,6 +1,8 @@
 import numpy as np
 import pygad
 import random
+import music21 as m21
+import pygame as pg
 
 
 # note to self: utilize chord generator from previous project
@@ -22,7 +24,7 @@ class ChordProgression:
         
     def randomlyInitializeChordSet(self):
         for i, chord in enumerate(self.chord_list):
-            random_chord = [random.randint(36,96) for i in range(4)]
+            random_chord = sorted([int(random.randint(36,96)) for i in range(4)])
             self.chord_set[i] = random_chord
             
         
@@ -34,7 +36,41 @@ class ChordProgression:
     
     def getChordSet(self):
         return self.chord_set
+    
+    def saveAsMIDI(self):
+        # Create a music21 stream
+        s = m21.stream.Stream()
 
-# instance = ChordProgression(['C', 'Dm', 'Em', 'F'])
-# instance.randomlyInitializeChordSet()
-# print(instance.getChordSet())
+        # Iterate over each chord in the chord set
+        for chord in self.chord_set:
+            # Create a list of music21 note objects from MIDI numbers
+            midi_notes = [m21.note.Note(midi=int(midi_num)) for midi_num in chord]
+            # Create a chord from these notes
+            midi_chord = m21.chord.Chord(midi_notes)
+            # Add the chord to the stream
+            s.append(midi_chord)
+
+        # Write the stream to a MIDI file
+        midi_path = "./output/output.mid"
+        s.write('midi', fp=midi_path)
+        return midi_path
+    
+    
+    def play(self):
+        
+        midi_path = self.saveAsMIDI()
+        # Play the MIDI file using pygame
+        pg.mixer.init()
+        pg.mixer.music.load(midi_path)
+        pg.mixer.music.play()
+
+        # Keep the program running until the music stops
+        while pg.mixer.music.get_busy():
+            pg.time.Clock().tick(10)
+        
+    
+
+instance = ChordProgression(['C', 'Dm', 'Em', 'F'])
+instance.randomlyInitializeChordSet()
+print(instance.getChordSet())
+instance.play()
