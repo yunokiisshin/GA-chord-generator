@@ -82,9 +82,3 @@ class ChordProgression:
             pg.time.Clock().tick(20)
         
     
-for i in range(3):
-
-    instance = ChordProgression()
-    instance.randomlyInitializeChordSet()
-    print(instance.getChordSet())
-    instance.play()

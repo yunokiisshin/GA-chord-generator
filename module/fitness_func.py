@@ -1,4 +1,6 @@
-def fitness_func(chord_set: np.ndarray):
+import numpy as np
+
+def fitness_func(ga_instance, chord_set: np.ndarray, chord_set_index: int):
     fitness = 0
     chord_fitness = np.array([0,0,0,0])
     # I am planning to do (sum of fitness of each chord) * (fitness of chord progression)
